@@ -1,0 +1,22 @@
+server:
+  port: 9000
+
+spring:
+  datasource:
+    url: jdbc:h2:mem:mettle-feature-flag-db
+    driverClassName: org.h2.Driver
+    username: sa
+    password: password
+  jpa:
+    database-platform: org.hibernate.dialect.H2Dialect
+    hibernate:
+      ddl-auto: create-drop
+
+app:
+  security:
+    jwt:
+      keystore:
+        location: ${KEY_STORE}
+        password: ${KEY_STORE_PASSWORD}
+      key-alias: ${KEY_ALIAS}
+      private-key-passphrase: ${KEY_PASSPHRASE}
