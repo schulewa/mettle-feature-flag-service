@@ -13,6 +13,7 @@ Ensure the following software is installed:
 - keystore (for generating SSL certificates)
 - change the file permissions for bin/*.sh from the project root directory
   - chmod 750 bin/*.sh
+- run command bin/create-jks.sh to create the jks_store.jks under the project src/main/resources
 
 ## Create JKS keystore and certificate
 
