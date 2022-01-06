@@ -19,8 +19,11 @@ import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.web.util.UriComponentsBuilder;
 
 import java.time.ZonedDateTime;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
+//@Disabled
 @ExtendWith(SpringExtension.class)
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
@@ -34,9 +37,6 @@ public class FeatureFlagControllerIT {
 
   @LocalServerPort
   private Integer port;
-
-  @Autowired
-  private FeatureFlagService featureFlagService;
 
   @Autowired
   private FeatureFlagEntityDao dao;
@@ -57,7 +57,7 @@ public class FeatureFlagControllerIT {
     logStartTest("TEST 1");
     dao.deleteAll();
     ResponseEntity<List<FeatureFlagDto>> response = restTemplate.exchange(constructUri_getAll(), HttpMethod.GET,
-                                                              null,
+                                                                          constructHttpEntity(null),
                                                                           new ParameterizedTypeReference<>() {});
     List<FeatureFlagDto> allFlags = response.getBody();
     Assertions.assertEquals(HttpStatus.OK, response.getStatusCode());
@@ -124,7 +124,7 @@ public class FeatureFlagControllerIT {
     // when
     ResponseEntity<List<FeatureFlagDto>> response = restTemplate.exchange(constructUri_getAll(),
                                                                           HttpMethod.GET,
-                                                              null,
+                                                                          constructHttpEntity(null),
                                                                           new ParameterizedTypeReference<>() {});
     List<FeatureFlagDto> allFlags = response.getBody();
     Assertions.assertEquals(HttpStatus.OK, response.getStatusCode());
@@ -156,9 +156,9 @@ public class FeatureFlagControllerIT {
 
     ResponseEntity<List<FeatureFlagDto>> response = restTemplate.exchange(constructUri_getForUser(NON_ADMIN_USER_2),
                                                                           HttpMethod.GET,
-                                                              null,
+                                                                          constructHttpEntity(null),
                                                                           new ParameterizedTypeReference<>() {});
-    List<FeatureFlagDto> allFlags = response.getBody();
+    List<FeatureFlagDto> allFlags = Optional.ofNullable(response.getBody()).orElse(new ArrayList<>());
 
     allFlags.forEach(e -> System.out.println(e.toString()));
 
@@ -193,6 +193,10 @@ public class FeatureFlagControllerIT {
     return constructUri() + "/all";
   }
 
+  /**
+   * Method <CODE>constructUri</CODE> is used for PUT and POST requests.
+   * @return a String representing the url for the request
+   */
   private String constructUri() {
     return UriComponentsBuilder
         .newInstance()
@@ -203,10 +207,15 @@ public class FeatureFlagControllerIT {
         .toUriString();
   }
 
-  private HttpEntity<FeatureFlagDto> constructHttpEntity(FeatureFlagDto toBeSaved) {
+  private HttpHeaders constructHttpHeaders() {
     HttpHeaders headers = new HttpHeaders();
     headers.setContentType(MediaType.APPLICATION_JSON);
-//    headers.add("Authorization", "Bearer ");
+    headers.setAccept(List.of(MediaType.APPLICATION_JSON));
+    return headers;
+  }
+
+  private HttpEntity<FeatureFlagDto> constructHttpEntity(FeatureFlagDto toBeSaved) {
+    HttpHeaders headers = constructHttpHeaders();
     return new HttpEntity<>(toBeSaved, headers);
   }
 

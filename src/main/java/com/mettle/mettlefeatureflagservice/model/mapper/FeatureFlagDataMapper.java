@@ -18,7 +18,7 @@ public class FeatureFlagDataMapper {
   }
 
   public FeatureFlagDto toRestEntity(FeatureFlagEntity domainEntity) {
-    return new FeatureFlagDto(//domainEntity.isEnabled(),
+    return new FeatureFlagDto(domainEntity.isEnabled(),
                             domainEntity.isGlobal(),
                             domainEntity.getName(),
                             domainEntity.getOwner());

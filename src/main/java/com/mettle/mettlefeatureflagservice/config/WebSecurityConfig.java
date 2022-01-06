@@ -39,34 +39,39 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     this.passwordEncoder = passwordEncoder;
   }
 
+//  @Override
+//  public void configure(WebSecurity web) throws Exception {
+//    web
+//        .ignoring()
+//        .antMatchers("/login");
+//  }
+
   @Override
   public void configure(WebSecurity web) throws Exception {
-    web
-        .ignoring()
-        .antMatchers("/login");
+    web.ignoring().antMatchers("/**");
   }
 
-  @Override
-  protected void configure(HttpSecurity http) throws Exception {
-    http
-        .cors()
-        .and()
-        .csrf().disable()
-        .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
-        .and()
-        .authorizeRequests(configurer ->
-            configurer
-              .antMatchers("/error", "/login")
-              .permitAll()
-              .anyRequest()
-              .authenticated()
-        ).oauth2ResourceServer(OAuth2ResourceServerConfigurer::jwt);
-
-    // JWT Validation Configuration
-    http.oauth2ResourceServer()
-        .jwt()
-        .jwtAuthenticationConverter(authenticationConverter());
-  }
+//  @Override
+//  protected void configure(HttpSecurity http) throws Exception {
+//    http
+//        .cors()
+//        .and()
+//        .csrf().disable()
+//        .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
+//        .and()
+//        .authorizeRequests(configurer ->
+//            configurer
+//              .antMatchers("/error", "/login")
+//              .permitAll()
+//              .anyRequest()
+//              .authenticated()
+//        ).oauth2ResourceServer(OAuth2ResourceServerConfigurer::jwt);
+//
+//    // JWT Validation Configuration
+//    http.oauth2ResourceServer()
+//        .jwt()
+//        .jwtAuthenticationConverter(authenticationConverter());
+//  }
 
   @Bean
   @Override

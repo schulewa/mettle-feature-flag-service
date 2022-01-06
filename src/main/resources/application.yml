@@ -26,9 +26,5 @@ app:
       key-alias: ${KEY_ALIAS}
       private-key-passphrase: ${KEY_PASSPHRASE}
 
-
-
 security:
-  basic:
-
-    enabled: false
+  ignored=/**:

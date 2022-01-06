@@ -37,21 +37,21 @@ public class FeatureFlagController {
   }
 
   @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
-  @PreAuthorize("hasAuthority('ADMIN')")
+  //@PreAuthorize("hasAuthority('ADMIN')")
   ResponseEntity<FeatureFlagDto> create(@RequestBody FeatureFlagDto newFeatureFlag) {
     log.info("Processing request to create feature flag [" + newFeatureFlag.toString() + "]");
     return new ResponseEntity<>(featureFlagService.create(newFeatureFlag), HttpStatus.CREATED);
   }
 
   @PutMapping(value = "/featureflags/{name}/enable", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
-  @PreAuthorize("hasAuthority('ADMIN')")
+  //@PreAuthorize("hasAuthority('ADMIN')")
   Boolean enable(@PathVariable String name) {
     log.info("Processing request to enable feature flag " + name);
     return featureFlagService.enable(name);
   }
 
   @PutMapping(value = "/featureflags/{name}/disable", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
-  @PreAuthorize("hasAuthority('ADMIN')")
+  //@PreAuthorize("hasAuthority('ADMIN')")
   Boolean disable(@PathVariable String name) {
     log.info("Processing request to disable feature flag " + name);
     return featureFlagService.disable(name);

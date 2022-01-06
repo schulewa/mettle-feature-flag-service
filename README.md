@@ -1,5 +1,10 @@
 # Mettle Feature Flag Service
 
+The Mettle Feature Flag Service provides the ability to maintain a list of feature flags. All flags are held in an in-memory database (for this POC).
+
+Security has been disabled in this initial version with the objective being to protect REST endpoints for ADMIN and non-ADMIN roles at a later date.
+The checks for whether the user hasAuthority have been commented out in the FeatureFlagController.
+
 ## Pre-requisites
 
 Ensure the following software is installed:
@@ -28,6 +33,7 @@ copy to src/test/resources for use in testing.
   - gradlew build
 
 ## How to run locally
-- either run from within your IDE or
-- build from the command line using command
+Ensure you are in the project directory and have executed bin/set-env.sh to set required environment variables, then:
+- either run from within your IDE (having set the environment variables as per bin/set-env.sh) or
+- build from the command line using command and then run
   - gradlew run

@@ -4,6 +4,7 @@ import com.mettle.mettlefeatureflagservice.model.dao.FeatureFlagEntityDao;
 import com.mettle.mettlefeatureflagservice.model.entity.FeatureFlagEntity;
 import com.mettle.mettlefeatureflagservice.model.mapper.FeatureFlagDataMapper;
 import com.mettle.mettlefeatureflagservice.rest.model.FeatureFlagDto;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import javax.validation.constraints.NotNull;
@@ -13,6 +14,7 @@ import java.util.Optional;
 import java.util.stream.StreamSupport;
 
 @Service
+@Slf4j
 public class FeatureFlagService {
 
   private final FeatureFlagEntityDao featureFlagEntityDao;
@@ -24,23 +26,28 @@ public class FeatureFlagService {
   }
 
   public List<FeatureFlagDto> getAll() {
+    log.info("Processing request to retrieve all feature flags");
     List<FeatureFlagDto> flags = new ArrayList<>();
     Iterable<FeatureFlagEntity> entities = featureFlagEntityDao.findAll();
     StreamSupport.stream(entities.spliterator(), false)
         .forEach(e -> flags.add(mapper.toRestEntity(e)));
+    log.info("Retrieved " + flags.size() + " feature flags");
     return flags;
   }
 
   public List<FeatureFlagDto> getForUser(String user) {
+    log.info("Processing request to retrieve all feature flags for user " + user);
     List<FeatureFlagDto> flags = new ArrayList<>();
     Iterable<FeatureFlagEntity> entities = featureFlagEntityDao.findAll();
     StreamSupport.stream(entities.spliterator(), false)
         .filter(e -> e.getOwner().equals(user))
         .forEach(e -> flags.add(mapper.toRestEntity(e)));
+    log.info("Retrieved " + flags.size() + " feature flags for user " + user);
     return flags;
   }
 
   public FeatureFlagDto create(FeatureFlagDto newFeatureFlag) {
+    log.info("Processing request to create feature flags");
     FeatureFlagEntity toBeSaved = mapper.toDomainEntity(newFeatureFlag);
     Optional<FeatureFlagEntity> existing = featureFlagEntityDao.findById(newFeatureFlag.getName());
 
@@ -49,14 +56,17 @@ public class FeatureFlagService {
     }
 
     FeatureFlagEntity saved = featureFlagEntityDao.save(toBeSaved);
+    log.info("Feature flag " + newFeatureFlag.getName() + " created");
     return mapper.toRestEntity(saved);
   }
 
   public boolean enable(@NotNull String name) {
+    log.info("Enabling feature flag " + name);
     return changeStatus(name, true);
   }
 
   public boolean disable(@NotNull String name) {
+    log.info("Disabling feature flag " + name);
     return changeStatus(name, false);
   }
 
